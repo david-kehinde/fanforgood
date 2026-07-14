@@ -1,17 +1,13 @@
 import { createBrowserClient } from '@supabase/ssr';
 
-function getSupabaseUrl() {
-  return process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? '';
-}
-
-function getSupabaseKey() {
-  return (
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-    process.env.VITE_SUPABASE_ANON_KEY ??
-    ''
-  );
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
 export function createClient() {
-  return createBrowserClient(getSupabaseUrl(), getSupabaseKey());
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      'Missing Supabase env vars. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your .env file, then restart the dev server.'
+    );
+  }
+  return createBrowserClient(supabaseUrl, supabaseAnonKey);
 }
