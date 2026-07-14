@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ShoppingCart } from 'lucide-react';
 import type { Product } from '@/lib/types';
-import { formatCurrency } from '@/lib/data';
+import { formatCurrency } from '@/lib/utils';
 import { useCart } from '@/contexts/CartContext';
 
 interface ProductCardProps {
@@ -32,13 +32,13 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     >
       <div className="relative aspect-square overflow-hidden bg-neutral-100 dark:bg-ink-soft">
         <Image
-          src={product.image}
+          src={product.image_url}
           alt={product.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 640px) 50vw, 25vw"
         />
-        {product.limited && (
+        {product.is_limited && (
           <span className="absolute top-3 left-3 px-3 py-1 text-xs font-semibold bg-gold-500 text-ink rounded-full">
             Limited
           </span>
@@ -49,12 +49,14 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       </div>
       <div className="p-5">
         <p className="text-xs text-gold-600 dark:text-gold-400 font-medium uppercase tracking-wider">
-          {product.celebrityName}
+          {product.celebrity_name ?? product.celebrity?.name}
         </p>
         <h3 className="font-semibold text-ink dark:text-white mt-1 line-clamp-2">
           {product.name}
         </h3>
-        <p className="text-xs text-neutral-500 mt-1 line-clamp-1">{product.charity}</p>
+        <p className="text-xs text-neutral-500 mt-1">
+          {product.entry_points} entries · {product.charity ?? product.celebrity?.charity}
+        </p>
         <div className="flex items-center justify-between mt-4">
           <span className="text-xl font-bold text-ink dark:text-white">
             {formatCurrency(product.price)}

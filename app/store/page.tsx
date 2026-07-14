@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
+import { getProducts, getCelebrities } from '@/lib/queries';
 import { StoreContent } from '@/components/store/StoreContent';
 
-export const metadata: Metadata = {
-  title: 'Merchandise Store',
-  description:
-    'Shop official celebrity merchandise. Every purchase supports verified charities and earns campaign entries.',
-};
+export default async function StorePage() {
+  const [products, celebrities] = await Promise.all([
+    getProducts(),
+    getCelebrities(),
+  ]);
 
-export default function StorePage() {
-  return <StoreContent />;
+  return <StoreContent products={products} celebrities={celebrities} />;
 }

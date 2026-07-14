@@ -2,12 +2,12 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { impactStats } from '@/lib/data';
+import type { ImpactStat } from '@/lib/types';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ArrowRight } from 'lucide-react';
 
-export function CharityImpact() {
+export function CharityImpact({ stats }: { stats: ImpactStat[] }) {
   return (
     <section className="py-24 lg:py-32 bg-ink text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_rgba(201,162,39,0.15),_transparent_50%)]" />
@@ -20,7 +20,7 @@ export function CharityImpact() {
         />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {impactStats.map((stat, index) => (
+          {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, scale: 0.9 }}

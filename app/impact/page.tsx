@@ -1,12 +1,8 @@
-import type { Metadata } from 'next';
+import { getImpactStats } from '@/lib/queries';
+import { charityReports } from '@/lib/constants';
 import { ImpactContent } from '@/components/impact/ImpactContent';
 
-export const metadata: Metadata = {
-  title: 'Charity Impact',
-  description:
-    'Transparent fundraising reports, donation breakdowns, and beneficiary stories from FanForGood campaigns.',
-};
-
-export default function ImpactPage() {
-  return <ImpactContent />;
+export default async function ImpactPage() {
+  const impactStats = await getImpactStats();
+  return <ImpactContent impactStats={impactStats} charityReports={charityReports} />;
 }

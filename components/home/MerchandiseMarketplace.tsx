@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { products } from '@/lib/data';
+import type { Product } from '@/lib/types';
 import { ProductCard } from '@/components/products/ProductCard';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ArrowRight } from 'lucide-react';
 
-export function MerchandiseMarketplace() {
+export function MerchandiseMarketplace({ products }: { products: Product[] }) {
   const featured = products.slice(0, 4);
 
   return (

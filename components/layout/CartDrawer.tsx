@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import { formatCurrency } from '@/lib/data';
+import { formatCurrency } from '@/lib/utils';
 
 export function CartDrawer() {
   const {
@@ -69,7 +69,7 @@ export function CartDrawer() {
                     <li key={product.id} className="flex gap-4">
                       <div className="relative h-20 w-20 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100">
                         <Image
-                          src={product.image}
+                          src={product.image_url}
                           alt={product.name}
                           fill
                           className="object-cover"
@@ -79,7 +79,7 @@ export function CartDrawer() {
                         <h3 className="font-medium text-ink dark:text-white truncate">
                           {product.name}
                         </h3>
-                        <p className="text-sm text-neutral-500">{product.celebrityName}</p>
+                        <p className="text-sm text-neutral-500">{product.celebrity_name ?? product.celebrity?.name}</p>
                         <p className="text-gold-600 font-semibold mt-1">
                           {formatCurrency(product.price)}
                         </p>
@@ -129,12 +129,13 @@ export function CartDrawer() {
                 <p className="text-xs text-neutral-500">
                   25%+ of your purchase supports verified charities. Entries applied at checkout.
                 </p>
-                <button
-                  type="button"
-                  className="w-full py-4 rounded-full bg-ink text-white font-medium hover:bg-ink-soft transition-colors dark:bg-gold-500 dark:text-ink dark:hover:bg-gold-400"
+                <Link
+                  href="/checkout"
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full py-4 rounded-full bg-ink text-white font-medium hover:bg-ink-soft transition-colors text-center dark:bg-gold-500 dark:text-ink dark:hover:bg-gold-400"
                 >
                   Proceed to Checkout
-                </button>
+                </Link>
               </div>
             )}
           </motion.aside>

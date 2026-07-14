@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { impactStats, charityReports, formatCurrency } from '@/lib/data';
+import type { ImpactStat } from '@/lib/types';
+import { formatCurrency } from '@/lib/utils';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { TrendingUp, Users, Droplets, BookOpen } from 'lucide-react';
@@ -37,7 +38,13 @@ const beneficiaryStories = [
   },
 ];
 
-export function ImpactContent() {
+export function ImpactContent({
+  impactStats,
+  charityReports,
+}: {
+  impactStats: ImpactStat[];
+  charityReports: { quarter: string; raised: number; distributed: number; overhead: number }[];
+}) {
   return (
     <div className="pt-24 lg:pt-28 pb-24">
       <section className="bg-ink text-white py-20">

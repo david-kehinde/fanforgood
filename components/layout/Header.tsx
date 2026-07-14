@@ -15,7 +15,7 @@ import {
 import { useTheme } from 'next-themes';
 import { useCart } from '@/contexts/CartContext';
 import { useFavorites } from '@/contexts/FavoritesContext';
-import { AccountModal } from '@/components/auth/AccountModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 const navLinks = [
   { href: '/#how-it-works', label: 'How It Works' },
@@ -27,10 +27,10 @@ const navLinks = [
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const { totalItems, setIsOpen } = useCart();
   const { favorites } = useFavorites();
+  const { user, profile } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-ink/90 backdrop-blur-xl border-b border-neutral-100 dark:border-ink-soft">
@@ -78,14 +78,13 @@ export function Header() {
               )}
             </Link>
 
-            <button
-              type="button"
-              onClick={() => setAccountOpen(true)}
+            <Link
+              href={user ? '/dashboard' : '/auth/login'}
               className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-ink-muted transition-colors hidden sm:block"
               aria-label="Account"
             >
               <User className="h-5 w-5 text-ink dark:text-white" />
-            </button>
+            </Link>
 
             <button
               type="button"
@@ -104,6 +103,12 @@ export function Header() {
             <ButtonLink href="/store" className="hidden md:inline-flex">
               Shop & Support
             </ButtonLink>
+
+            {profile?.role === 'admin' && (
+              <Link href="/admin" className="hidden lg:inline-flex px-4 py-2 text-sm font-medium text-gold-600 hover:text-gold-500">
+                Admin
+              </Link>
+            )}
 
             <button
               type="button"
@@ -137,6 +142,13 @@ export function Header() {
                 </Link>
               ))}
               <Link
+                href={user ? '/dashboard' : '/auth/login'}
+                onClick={() => setMobileOpen(false)}
+                className="px-4 py-3 rounded-lg text-ink dark:text-white hover:bg-neutral-50 dark:hover:bg-ink-muted font-medium"
+              >
+                {user ? 'My Dashboard' : 'Sign In'}
+              </Link>
+              <Link
                 href="/store"
                 onClick={() => setMobileOpen(false)}
                 className="mt-2 px-4 py-3 rounded-full bg-ink text-white text-center font-medium dark:bg-gold-500 dark:text-ink"
@@ -147,8 +159,6 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <AccountModal open={accountOpen} onClose={() => setAccountOpen(false)} />
     </header>
   );
 }

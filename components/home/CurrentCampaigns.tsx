@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Clock, Users, MapPin } from 'lucide-react';
-import { campaigns } from '@/lib/data';
+import type { Campaign } from '@/lib/types';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 
@@ -30,7 +30,7 @@ function Countdown({ days }: { days: number }) {
   );
 }
 
-export function CurrentCampaigns() {
+export function CurrentCampaigns({ campaigns }: { campaigns: Campaign[] }) {
   return (
     <section className="py-24 lg:py-32 bg-white dark:bg-ink">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,7 +52,7 @@ export function CurrentCampaigns() {
             >
               <div className="relative md:w-2/5 aspect-video md:aspect-auto min-h-[200px]">
                 <Image
-                  src={campaign.image}
+                  src={campaign.image_url || campaign.celebrity?.hero_image_url || ''}
                   alt={campaign.title}
                   fill
                   className="object-cover"
@@ -75,17 +75,17 @@ export function CurrentCampaigns() {
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Clock className="h-4 w-4 text-gold-500" />
-                    {campaign.daysRemaining} days left
+                    {campaign.days_remaining ?? 0} days left
                   </span>
                 </div>
-                <Countdown days={campaign.daysRemaining} />
+                <Countdown days={campaign.days_remaining ?? 0} />
                 <div className="mt-6 p-4 rounded-xl bg-gold-50 dark:bg-gold-500/10 border border-gold-200/50 dark:border-gold-500/20">
                   <p className="text-sm font-medium text-ink dark:text-white flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-gold-600" />
-                    Meet & Greet: {campaign.meetGreetDate}
+                    Meet & Greet: {campaign.meet_greet_date}
                   </p>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-                    {campaign.meetGreetLocation}
+                    {campaign.meet_greet_location}
                   </p>
                 </div>
                 <Link

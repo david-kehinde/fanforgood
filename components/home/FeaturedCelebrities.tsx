@@ -4,12 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, ArrowRight } from 'lucide-react';
-import { celebrities } from '@/lib/data';
+import type { Celebrity } from '@/lib/types';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Button } from '@/components/ui/Button';
 
-export function FeaturedCelebrities() {
+export function FeaturedCelebrities({ celebrities }: { celebrities: Celebrity[] }) {
   const { toggleFavorite, isFavorite } = useFavorites();
 
   return (
@@ -33,7 +33,7 @@ export function FeaturedCelebrities() {
             >
               <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
-                  src={celebrity.image}
+                  src={celebrity.image_url}
                   alt={celebrity.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -44,9 +44,7 @@ export function FeaturedCelebrities() {
                   onClick={() => toggleFavorite(celebrity.id)}
                   className="absolute top-4 right-4 p-2 rounded-full bg-white/90 dark:bg-ink/90 backdrop-blur-sm hover:scale-110 transition-transform"
                   aria-label={
-                    isFavorite(celebrity.id)
-                      ? 'Remove from favorites'
-                      : 'Add to favorites'
+                    isFavorite(celebrity.id) ? 'Remove from favorites' : 'Add to favorites'
                   }
                 >
                   <Heart
@@ -69,7 +67,7 @@ export function FeaturedCelebrities() {
                 </h3>
                 <p className="text-sm text-neutral-500 mt-1">{celebrity.profession}</p>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-3">
-                  {celebrity.merchandiseCount} items available
+                  {celebrity.merchandise_count ?? 0} items available
                 </p>
                 <Button
                   href={`/campaigns/${celebrity.slug}`}

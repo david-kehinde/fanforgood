@@ -2,9 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
-import { products, celebrities } from '@/lib/data';
+import type { Celebrity, Product } from '@/lib/types';
 import { ProductCard } from '@/components/products/ProductCard';
-import type { Product } from '@/lib/types';
 
 const categories = [
   { id: 'all', label: 'All' },
@@ -14,23 +13,30 @@ const categories = [
   { id: 'limited', label: 'Limited Edition' },
 ];
 
-export function StoreContent() {
+export function StoreContent({
+  products,
+  celebrities,
+}: {
+  products: Product[];
+  celebrities: Celebrity[];
+}) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
   const [celebrityFilter, setCelebrityFilter] = useState('all');
 
   const filtered = useMemo(() => {
-    return products.filter((p: Product) => {
+    return products.filter((p) => {
+      const celebName = p.celebrity_name ?? p.celebrity?.name ?? '';
       const matchesSearch =
         search === '' ||
         p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.celebrityName.toLowerCase().includes(search.toLowerCase());
+        celebName.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = category === 'all' || p.category === category;
       const matchesCelebrity =
-        celebrityFilter === 'all' || p.celebrityId === celebrityFilter;
+        celebrityFilter === 'all' || p.celebrity_id === celebrityFilter;
       return matchesSearch && matchesCategory && matchesCelebrity;
     });
-  }, [search, category, celebrityFilter]);
+  }, [search, category, celebrityFilter, products]);
 
   return (
     <div className="pt-24 lg:pt-28 pb-24 min-h-screen bg-neutral-50 dark:bg-ink-muted">
